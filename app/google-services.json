@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "853214087248",
+    "firebase_url": "https://fifa2018-d6ea3.firebaseio.com",
+    "project_id": "fifa2018-d6ea3",
+    "storage_bucket": "fifa2018-d6ea3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853214087248:android:98706c9dfb70b13e",
+        "android_client_info": {
+          "package_name": "com.firstbit.fifaworldcup2018highlights"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "853214087248-3aqtd371f4rv01g5lkuio7dotkb0cfam.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "853214087248-3aqtd371f4rv01g5lkuio7dotkb0cfam.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGz86FKa1QX4rbRiBzNIj5xfF4lsEfhPc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
