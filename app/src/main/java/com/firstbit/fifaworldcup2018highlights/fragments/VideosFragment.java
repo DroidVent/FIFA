@@ -34,6 +34,9 @@ public class VideosFragment extends Fragment {
     private RecyclerView rvVideos;
     private ProgressBar progressBar;
     private String videosTag;
+    private int mPostsPerPage=10;
+    private int mTotalItemCount,mLastVisibleItemPosition;
+    private boolean mIsLoading;
 
     @Nullable
     @Override
@@ -47,16 +50,33 @@ public class VideosFragment extends Fragment {
 
     private void init() {
         videosAdapter = new VideosAdapter(getContext(), videos);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvVideos = (RecyclerView)rootView.findViewById(R.id.rv_videos);
         rvVideos.setLayoutManager(linearLayoutManager);
         rvVideos.setAdapter(videosAdapter);
         progressBar  = (ProgressBar)rootView.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.VISIBLE);
+        rvVideos.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                mTotalItemCount = linearLayoutManager.getItemCount();
+                mLastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
+
+                if (!mIsLoading && mTotalItemCount <= (mLastVisibleItemPosition
+                        + mPostsPerPage)) {
+                    getVideos();
+                    mIsLoading = true;
+                }
+            }
+        });
     }
+
     private void getVideos() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        Query myRef = database.getReference(videosTag).orderByChild("mtime");
+        Query myRef = database.getReference(videosTag).orderByChild("mtime").limitToFirst(mPostsPerPage);
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -66,14 +86,17 @@ public class VideosFragment extends Fragment {
                 }
                 progressBar.setVisibility(View.GONE);
                 videosAdapter.notifyDataSetChanged();
+                mIsLoading = false;
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e("", "onCancelled", databaseError.toException());
+                mIsLoading = false;
             }
         });
 
     }
+
 }
 
