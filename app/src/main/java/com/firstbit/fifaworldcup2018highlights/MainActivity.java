@@ -40,7 +40,6 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private int currentMenuItem;
     private Fragment fragmentCurrent;
     private Fragment videoFragment = new VideosFragment();
     private AdView mAdView;
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        initAd();
+        initAd();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -62,7 +61,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        currentMenuItem = R.id.nav_highlights;
         if (savedInstanceState == null) {
             addFragment(videoFragment, "videos");
         }
@@ -115,10 +113,6 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         int groupId = item.getGroupId();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (id == currentMenuItem) {
-            drawer.closeDrawer(GravityCompat.START);
-            return false;
-        }
         if (id == R.id.nav_schedule) {
             launchFragment(new ScheduleFragment(), "schedule");
         } else if (id == R.id.nav_highlights) {
@@ -128,7 +122,6 @@ public class MainActivity extends AppCompatActivity
         {
             launchFragment(new VideosFragment(), item.toString());
         }
-        currentMenuItem = id;
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
