@@ -33,11 +33,13 @@ public class VideosFragment extends Fragment {
     VideosAdapter videosAdapter;
     private RecyclerView rvVideos;
     private ProgressBar progressBar;
+    private String videosTag;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.videos_layout, container, false);
+        videosTag = getArguments().getString("tag");
         init();
         getVideos();
         return rootView;
@@ -54,7 +56,7 @@ public class VideosFragment extends Fragment {
     }
     private void getVideos() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        Query myRef = database.getReference("videos").orderByChild("mtime");
+        Query myRef = database.getReference(videosTag).orderByChild("mtime");
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

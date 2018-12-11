@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
@@ -12,13 +13,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.firstbit.fifaworldcup2018highlights.data.League;
+import com.firstbit.fifaworldcup2018highlights.data.Video;
 import com.firstbit.fifaworldcup2018highlights.fragments.StandingsFragment;
 import com.firstbit.fifaworldcup2018highlights.fragments.VideosFragment;
 import com.firstbit.fifaworldcup2018highlights.fragments.ScheduleFragment;
@@ -26,6 +31,11 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,8 +43,6 @@ public class MainActivity extends AppCompatActivity
     private int currentMenuItem;
     private Fragment fragmentCurrent;
     private Fragment videoFragment = new VideosFragment();
-    private TextView tvUser;
-    private ImageView ivUser;
     private AdView mAdView;
 
     @Override
@@ -54,14 +62,13 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        tvUser = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_username);
-        ivUser = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.iv_profile);
-        setUserData();
         currentMenuItem = R.id.nav_highlights;
         if (savedInstanceState == null) {
-            addFragment(videoFragment);
+            addFragment(videoFragment, "videos");
         }
-
+        Menu menu = navigationView.getMenu();
+        Menu submenu = menu.addSubMenu("Leagues and Cups");
+        getLeagues(submenu);
     }
 
     private void initAd() {
@@ -70,23 +77,6 @@ public class MainActivity extends AppCompatActivity
         AdRequest adRequest = new AdRequest.Builder()
                 .build();
         mAdView.loadAd(adRequest);
-    }
-
-    private void setUserData() {
-        SharedPreferences sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE);
-        String username = sharedPref.getString("username", "");
-        String photo = sharedPref.getString("photo", "");
-        if (photo != null && !photo.equals("")) {
-            RequestOptions requestOptions = new RequestOptions();
-            requestOptions.centerCrop();
-            requestOptions.placeholder(R.mipmap.user_placeholder);
-            Glide.with(this)
-                    .load(photo)
-                    .apply(requestOptions)
-                    .into(ivUser);
-        }
-        if (username != null && !username.equals(""))
-            tvUser.setText(username);
     }
 
     @Override
@@ -100,7 +90,7 @@ public class MainActivity extends AppCompatActivity
                 super.onBackPressed();
             } else {
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                launchFragment(videoFragment, "highlights");
+                launchFragment(videoFragment, "videos");
             }
         }
     }
@@ -114,32 +104,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-  /*      int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_signout) {
-            FirebaseAuth.getInstance().signOut();
-            clearPrefernce();
-            launchSignIn();
-            finish();
-            return true;
-        }
-*/
         return super.onOptionsItemSelected(item);
-    }
-
-    private void launchSignIn() {
-        Intent mIntent = new Intent(this, SigninActivity.class);
-        startActivity(mIntent);
-    }
-
-    private void clearPrefernce() {
-        SharedPreferences sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.remove("email").apply();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -147,6 +113,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        int groupId = item.getGroupId();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (id == currentMenuItem) {
             drawer.closeDrawer(GravityCompat.START);
@@ -155,26 +122,55 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_schedule) {
             launchFragment(new ScheduleFragment(), "schedule");
         } else if (id == R.id.nav_highlights) {
-            launchFragment(new VideosFragment(), "highlights");
-        } else if (id == R.id.nav_standings)
-            launchFragment(new StandingsFragment(), "standings");
+            launchFragment(new VideosFragment(), "videos");
+        }
+        else if (groupId == R.id.leagues)
+        {
+            launchFragment(new VideosFragment(), item.toString());
+        }
         currentMenuItem = id;
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void addFragment(Fragment fragment) {
+    private void addFragment(Fragment fragment , String tag) {
         fragmentCurrent = fragment;
+        Bundle bundle = new Bundle();
+        bundle.putString("tag", tag);
+        fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().add(R.id.fl_container, fragment).commit();
     }
 
     private void launchFragment(Fragment fragment, String tag) {
+        Bundle bundle = new Bundle();
+        bundle.putString("tag", tag);
         fragmentCurrent = fragment;
+        fragment.setArguments(bundle);
         FragmentManager manager = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.fl_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+    private void getLeagues(final Menu submenu) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        Query myRef = database.getReference("leagues_cups");
+
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                    submenu.add(R.id.leagues,Menu.NONE,Menu.NONE,singleSnapshot.getValue(League.class).getLeague_name());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("", "onCancelled", databaseError.toException());
+            }
+        });
+
     }
 }
