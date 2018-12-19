@@ -37,6 +37,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import cn.jzvd.Jzvd;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -79,19 +81,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+
         finish();
-     /*   DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (fragmentCurrent.equals(videoFragment)) {
-                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                super.onBackPressed();
-            } else {
-                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                launchFragment(videoFragment, "videos");
-            }
-        }*/
+
     }
 
     @Override

@@ -23,6 +23,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import cn.jzvd.JZMediaManager;
+import cn.jzvd.Jzvd;
+import cn.jzvd.JzvdMgr;
+
 public class VideosFragment extends Fragment {
     private View rootView;
     private ArrayList<Video> videos = new ArrayList<>();
@@ -51,6 +55,24 @@ public class VideosFragment extends Fragment {
         rvVideos.setAdapter(videosAdapter);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
 
+        rvVideos.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(View view) {
+
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(View view) {
+                Jzvd jzvd = view.findViewById(R.id.videoplayer);
+                if (jzvd != null && jzvd.jzDataSource.containsTheUrl(JZMediaManager.getCurrentUrl())) {
+                    Jzvd currentJzvd = JzvdMgr.getCurrentJzvd();
+                    if (currentJzvd != null && currentJzvd.currentScreen != Jzvd.SCREEN_WINDOW_FULLSCREEN) {
+                        Jzvd.releaseAllVideos();
+                    }
+                }
+            }
+        });
+
     }
 
     private void getVideos() {
@@ -75,5 +97,11 @@ public class VideosFragment extends Fragment {
 
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Jzvd.releaseAllVideos();
+    }
 }
 

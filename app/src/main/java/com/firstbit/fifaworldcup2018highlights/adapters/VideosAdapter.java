@@ -19,6 +19,9 @@ import com.firstbit.fifaworldcup2018highlights.data.Video;
 
 import java.util.ArrayList;
 
+import cn.jzvd.Jzvd;
+import cn.jzvd.JzvdStd;
+
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder>  {
     private Context context;
     private ArrayList<Video> videos;
@@ -46,10 +49,15 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.centerCrop();
             requestOptions.placeholder(R.drawable.video_placeholder);
-            Glide.with(context)
-                    .load(video.getThumb())
-                    .apply(requestOptions)
-                    .into(holder.ivThumb);
+            holder.jzvdStd.setUp(
+                    video.getPath(),
+                    "", Jzvd.SCREEN_WINDOW_LIST);
+
+            Glide.with(holder.jzvdStd.getContext()).load(video.getThumb()).into(holder.jzvdStd.thumbImageView);
+//            Glide.with(context)
+//                    .load(video.getThumb())
+//                    .apply(requestOptions)
+//                    .into(holder.ivThumb);
         }
         holder.tvVideoName.setText(video.getVideo_name());
         holder.tvVideoTime.setText(video.getMtime());
@@ -71,16 +79,18 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivThumb;
+//        ImageView ivThumb;
         TextView tvVideoName, tvVideoTime, tvLeagueName;
         CardView view;
+        JzvdStd jzvdStd;
         public ViewHolder(View itemView) {
             super(itemView);
             view = (CardView)itemView.findViewById(R.id.card_view);
-            ivThumb = (ImageView)itemView.findViewById(R.id.iv_thumb);
+//            ivThumb = (ImageView)itemView.findViewById(R.id.iv_thumb);
             tvVideoName = (TextView)itemView.findViewById(R.id.tv_video_name);
             tvVideoTime = (TextView)itemView.findViewById(R.id.tv_video_time);
             tvLeagueName = (TextView)itemView.findViewById(R.id.tv_league);
+            jzvdStd = itemView.findViewById(R.id.videoplayer);
         }
     }
 }
