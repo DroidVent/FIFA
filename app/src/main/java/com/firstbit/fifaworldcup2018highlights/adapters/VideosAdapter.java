@@ -53,7 +53,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
                     video.getPath(),
                     "", Jzvd.SCREEN_WINDOW_LIST);
 
-            Glide.with(holder.jzvdStd.getContext()).load(video.getThumb()).into(holder.jzvdStd.thumbImageView);
+            Glide.with(holder.jzvdStd.getContext()).load(video.getThumb()).apply(requestOptions).into(holder.jzvdStd.thumbImageView);
 //            Glide.with(context)
 //                    .load(video.getThumb())
 //                    .apply(requestOptions)
@@ -66,9 +66,9 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mIntent = new Intent(context, VideoPlayerActivity.class);
-                mIntent.putExtra("path", video.getPath());
-                context.startActivity(mIntent);
+//                Intent mIntent = new Intent(context, VideoPlayerActivity.class);
+//                mIntent.putExtra("path", video.getPath());
+//                context.startActivity(mIntent);
             }
         });
     }
