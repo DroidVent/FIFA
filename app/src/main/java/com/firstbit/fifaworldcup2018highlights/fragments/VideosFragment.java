@@ -23,6 +23,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import cn.jzvd.JZMediaManager;
+import cn.jzvd.Jzvd;
+import cn.jzvd.JzvdMgr;
+import cn.jzvd.JzvdStd;
+
 public class VideosFragment extends Fragment {
     private View rootView;
     private ArrayList<Video> videos = new ArrayList<>();
@@ -46,16 +51,35 @@ public class VideosFragment extends Fragment {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvVideos = (RecyclerView) rootView.findViewById(R.id.rv_videos);
         rvVideos.setLayoutManager(linearLayoutManager);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
         rvVideos.setAdapter(videosAdapter);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+
+        rvVideos.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(View view) {
+                Log.e("h", "");
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(View view) {
+                Jzvd jzvd = view.findViewById(R.id.videoplayer);
+                if (jzvd != null && jzvd.jzDataSource.containsTheUrl(JZMediaManager.getCurrentUrl())) {
+                    Jzvd currentJzvd = JzvdMgr.getCurrentJzvd();
+                    if (currentJzvd != null && currentJzvd.currentScreen != Jzvd.SCREEN_WINDOW_FULLSCREEN) {
+                        Jzvd.releaseAllVideos();
+                    }
+                }
+            }
+        });
 
     }
 
     private void getVideos() {
         progressBar.setVisibility(View.VISIBLE);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        Query myRef = database.getReference(videosTag).orderByChild("mtime");
-
+        Query myRef = database.getReference(videosTag).orderByChild("timestamp");
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -74,5 +98,10 @@ public class VideosFragment extends Fragment {
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Jzvd.releaseAllVideos();
+    }
 }
 

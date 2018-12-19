@@ -3,6 +3,7 @@ package com.firstbit.fifaworldcup2018highlights;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -27,9 +28,12 @@ import com.firstbit.fifaworldcup2018highlights.data.Video;
 import com.firstbit.fifaworldcup2018highlights.fragments.StandingsFragment;
 import com.firstbit.fifaworldcup2018highlights.fragments.VideosFragment;
 import com.firstbit.fifaworldcup2018highlights.fragments.ScheduleFragment;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,21 +41,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import cn.jzvd.Jzvd;
+
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Fragment fragmentCurrent;
     private Fragment videoFragment = new VideosFragment();
     private AdView mAdView;
-
+    private InterstitialAd mInterstitialAd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        initAd();
-
+        initBannerAd();
+        MobileAds.initialize(this, getString(R.string.full_screen_ad_id));
+        initFullScreenAds();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -62,34 +70,45 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         if (savedInstanceState == null) {
-            addFragment(videoFragment, "videos");
+            addFragment(videoFragment, "latest");
         }
         Menu menu = navigationView.getMenu();
         Menu submenu = menu.addSubMenu("Leagues and Cups");
         getLeagues(submenu);
     }
 
-    private void initAd() {
+    private void initBannerAd() {
         mAdView = (AdView) findViewById(R.id.adView);
 
         AdRequest adRequest = new AdRequest.Builder()
                 .build();
+
         mAdView.loadAd(adRequest);
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (fragmentCurrent.equals(videoFragment)) {
-                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                super.onBackPressed();
-            } else {
-                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                launchFragment(videoFragment, "videos");
-            }
+        finish();
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        int ot = getResources().getConfiguration().orientation;
+        switch(ot)
+        {
+
+            case  Configuration.ORIENTATION_LANDSCAPE:
+
+                Log.d("my orient" ,"ORIENTATION_LANDSCAPE");
+                break;
+            case Configuration.ORIENTATION_PORTRAIT:
+                showInterstitial();
+                break;
+            default:
+                Log.d("my orient", "default val");
+                break;
         }
     }
 
@@ -117,9 +136,9 @@ public class MainActivity extends AppCompatActivity
             launchFragment(new ScheduleFragment(), "schedule");
         } else if (id == R.id.nav_highlights) {
             launchFragment(new VideosFragment(), "videos");
-        }
-        else if (groupId == R.id.leagues)
-        {
+        } else if (id == R.id.nav_all_leagues)
+            launchFragment(new VideosFragment(), "latest");
+        else if (groupId == R.id.leagues) {
             launchFragment(new VideosFragment(), item.toString());
         }
 
@@ -127,7 +146,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void addFragment(Fragment fragment , String tag) {
+    private void addFragment(Fragment fragment, String tag) {
         fragmentCurrent = fragment;
         Bundle bundle = new Bundle();
         bundle.putString("tag", tag);
@@ -146,6 +165,7 @@ public class MainActivity extends AppCompatActivity
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
     private void getLeagues(final Menu submenu) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         Query myRef = database.getReference("leagues_cups");
@@ -153,8 +173,8 @@ public class MainActivity extends AppCompatActivity
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-                    submenu.add(R.id.leagues,Menu.NONE,Menu.NONE,singleSnapshot.getValue(League.class).getLeague_name());
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    submenu.add(R.id.leagues, Menu.NONE, Menu.NONE, singleSnapshot.getValue(League.class).getLeague_name());
                 }
 
             }
@@ -165,5 +185,20 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+    }
+    private void initFullScreenAds() {
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.full_screen_ad_id));
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            public void onAdLoaded() {
+
+            }
+        });
+    }
+    private void showInterstitial() {
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
     }
 }
