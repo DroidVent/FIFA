@@ -5,6 +5,7 @@ public class Video {
     private String path;
     private String video_name;
     private String thumb;
+    private String league_name;
 
     public String getMtime() {
         return mtime;
@@ -36,5 +37,13 @@ public class Video {
 
     public void setThumb(String thumb) {
         this.thumb = thumb;
+    }
+
+    public String getLeague_name() {
+        return league_name;
+    }
+
+    public void setLeague_name(String league_name) {
+        this.league_name = league_name;
     }
 }

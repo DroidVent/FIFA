@@ -2,8 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
 
@@ -19,8 +18,8 @@
         <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:padding="10dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="10dp">
 
             <FrameLayout
                 android:id="@+id/fl_video"
@@ -44,15 +43,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:textStyle="bold"
                 android:textColor="@android:color/background_dark"
-                card_view:layout_constraintTop_toBottomOf="@+id/fl_video"/>
-          <TextView
+                card_view:layout_constraintTop_toBottomOf="@+id/fl_video" />
+
+            <TextView
                 android:id="@+id/tv_video_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
-              android:textColor="@android:color/background_dark"
-                card_view:layout_constraintTop_toBottomOf="@+id/tv_video_name"/>
+                android:textColor="@android:color/background_dark"
+                android:layout_marginTop="5dp"
+                card_view:layout_constraintTop_toBottomOf="@+id/tv_video_name" />
+            <TextView
+                android:id="@+id/tv_league"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+
+                android:layout_marginTop="5dp"
+                android:textColor="@android:color/background_dark"
+                />
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>

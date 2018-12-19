@@ -7,11 +7,11 @@
         <item
             android:id="@+id/nav_highlights"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="World cup highlights" />
+            android:title="World Cup Highlights" />
         <item
             android:id="@+id/nav_schedule"
             android:icon="@mipmap/schedule"
-            android:title="World cup schedule" />
+            android:title="World Cup Schedule" />
 
     </group>
     <group android:id="@+id/leagues"/>

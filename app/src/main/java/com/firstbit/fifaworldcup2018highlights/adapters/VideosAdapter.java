@@ -53,6 +53,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
         }
         holder.tvVideoName.setText(video.getVideo_name());
         holder.tvVideoTime.setText(video.getMtime());
+        if (video.getLeague_name() != null && !video.getLeague_name().isEmpty())
+            holder.tvLeagueName.setText(video.getLeague_name());
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +72,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivThumb;
-        TextView tvVideoName, tvVideoTime;
+        TextView tvVideoName, tvVideoTime, tvLeagueName;
         CardView view;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -78,6 +80,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
             ivThumb = (ImageView)itemView.findViewById(R.id.iv_thumb);
             tvVideoName = (TextView)itemView.findViewById(R.id.tv_video_name);
             tvVideoTime = (TextView)itemView.findViewById(R.id.tv_video_time);
+            tvLeagueName = (TextView)itemView.findViewById(R.id.tv_league);
         }
     }
 }
