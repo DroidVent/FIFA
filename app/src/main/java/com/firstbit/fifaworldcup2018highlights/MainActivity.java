@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         if (savedInstanceState == null) {
-            addFragment(videoFragment, "videos");
+            addFragment(videoFragment, "all_leagues_cups");
         }
         Menu menu = navigationView.getMenu();
         Menu submenu = menu.addSubMenu("Leagues and Cups");
@@ -118,9 +118,9 @@ public class MainActivity extends AppCompatActivity
             launchFragment(new ScheduleFragment(), "schedule");
         } else if (id == R.id.nav_highlights) {
             launchFragment(new VideosFragment(), "videos");
-        }
-        else if (groupId == R.id.leagues)
-        {
+        } else if (id == R.id.nav_all_leagues)
+            launchFragment(new VideosFragment(), "all_leagues_cups");
+        else if (groupId == R.id.leagues) {
             launchFragment(new VideosFragment(), item.toString());
         }
 
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void addFragment(Fragment fragment , String tag) {
+    private void addFragment(Fragment fragment, String tag) {
         fragmentCurrent = fragment;
         Bundle bundle = new Bundle();
         bundle.putString("tag", tag);
@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
     private void getLeagues(final Menu submenu) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         Query myRef = database.getReference("leagues_cups");
@@ -154,8 +155,8 @@ public class MainActivity extends AppCompatActivity
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-                    submenu.add(R.id.leagues,Menu.NONE,Menu.NONE,singleSnapshot.getValue(League.class).getLeague_name());
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    submenu.add(R.id.leagues, Menu.NONE, Menu.NONE, singleSnapshot.getValue(League.class).getLeague_name());
                 }
 
             }

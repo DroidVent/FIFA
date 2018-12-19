@@ -15,8 +15,20 @@
       },
       "oauth_client": [
         {
-          "client_id": "853214087248-3aqtd371f4rv01g5lkuio7dotkb0cfam.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "853214087248-0ehi8s0su8v73a0tvpvskk6im8u0fvan.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.firstbit.fifaworldcup2018highlights",
+            "certificate_hash": "24c4ab290243f34325c4038fdafb6e4ceeac4851"
+          }
+        },
+        {
+          "client_id": "853214087248-vf88kabnr9mpc41292du476ugra91klg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.firstbit.fifaworldcup2018highlights",
+            "certificate_hash": "927372e965893de89a8d4f7e2478b448810c6c9e"
+          }
         },
         {
           "client_id": "853214087248-3aqtd371f4rv01g5lkuio7dotkb0cfam.apps.googleusercontent.com",
@@ -33,8 +45,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "853214087248-3aqtd371f4rv01g5lkuio7dotkb0cfam.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
