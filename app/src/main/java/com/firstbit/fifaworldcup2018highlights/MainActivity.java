@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity
     private Fragment videoFragment = new VideosFragment();
     private AdView mAdView;
     private InterstitialAd mInterstitialAd;
+    private boolean doubleBackToExitPressedOnce;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +92,22 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        finish();
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
+
 
     }
 
@@ -96,12 +115,11 @@ public class MainActivity extends AppCompatActivity
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         int ot = getResources().getConfiguration().orientation;
-        switch(ot)
-        {
+        switch (ot) {
 
-            case  Configuration.ORIENTATION_LANDSCAPE:
+            case Configuration.ORIENTATION_LANDSCAPE:
 
-                Log.d("my orient" ,"ORIENTATION_LANDSCAPE");
+                Log.d("my orient", "ORIENTATION_LANDSCAPE");
                 break;
             case Configuration.ORIENTATION_PORTRAIT:
                 showInterstitial();
@@ -186,6 +204,7 @@ public class MainActivity extends AppCompatActivity
         });
 
     }
+
     private void initFullScreenAds() {
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.full_screen_ad_id));
@@ -196,6 +215,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
+
     private void showInterstitial() {
         if (mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
