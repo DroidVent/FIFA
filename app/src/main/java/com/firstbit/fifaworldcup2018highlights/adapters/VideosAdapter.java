@@ -19,8 +19,6 @@ import com.firstbit.fifaworldcup2018highlights.data.Video;
 
 import java.util.ArrayList;
 
-import cn.jzvd.Jzvd;
-import cn.jzvd.JzvdStd;
 
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder>  {
     private Context context;
@@ -66,9 +64,9 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent mIntent = new Intent(context, VideoPlayerActivity.class);
-//                mIntent.putExtra("path", video.getPath());
-//                context.startActivity(mIntent);
+                Intent mIntent = new Intent(context, VideoPlayerActivity.class);
+                mIntent.putExtra("path", video.getPath());
+                context.startActivity(mIntent);
             }
         });
     }

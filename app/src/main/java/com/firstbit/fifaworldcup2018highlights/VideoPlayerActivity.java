@@ -10,13 +10,14 @@ import android.util.Log;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
-public class VideoPlayerActivity extends AppCompatActivity {
-    private VideoView myVideoView;
+public class VideoPlayerActivity extends AppCompatActivity implements OnPreparedListener {
+    private com.devbrackets.android.exomedia.ui.widget.VideoView myVideoView;
     private int position = 0;
     private ProgressDialog progressDialog;
     private MediaController mediaControls;
@@ -34,51 +35,18 @@ public class VideoPlayerActivity extends AppCompatActivity {
         }
         getBundle();
         //initialize the VideoView
-        myVideoView = (VideoView) findViewById(R.id.video_view);
+        myVideoView = (com.devbrackets.android.exomedia.ui.widget.VideoView) findViewById(R.id.video_view);
+        setupVideoView();
 
-        // create a progress bar while the video file is loading
-        progressDialog = new ProgressDialog(this);
-        // set a title for the progress bar
-//        progressDialog.setTitle("JavaCodeGeeks Android Video View Example");
-        // set a message for the progress bar
-        progressDialog.setMessage("Loading...");
-        //set the progress bar not cancelable on users' touch
-        progressDialog.setCancelable(true);
-        // show the progress bar
-        progressDialog.show();
-
-        try {
-            //set the media controller in the VideoView
-            myVideoView.setMediaController(mediaControls);
-
-            //set the uri of the video to be played
-            myVideoView.setVideoURI(Uri.parse(path));
-
-        } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-            e.printStackTrace();
-        }
-
-        myVideoView.requestFocus();
-        //we also set an setOnPreparedListener in order to know when the video file is ready for playback
-        myVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                // close the progress bar and play the video
-                progressDialog.dismiss();
-                //if we have a position on savedInstanceState, the video playback should start from here
-                myVideoView.seekTo(position);
-                if (position == 0) {
-                    myVideoView.start();
-                } else {
-                    //if we come from a resumed activity, video playback will be paused
-                    myVideoView.pause();
-                }
-            }
-        });
 
     }
+    private void setupVideoView() {
+        // Make sure to use the correct VideoView import
+        myVideoView.setOnPreparedListener(this);
 
+        //For now we just picked an arbitrary item to play
+        myVideoView.setVideoURI(Uri.parse(path));
+    }
     private void initAds() {
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.full_screen_ad_id));
@@ -100,25 +68,15 @@ public class VideoPlayerActivity extends AppCompatActivity {
             this.path = bundle.getString("path");
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        //we use onSaveInstanceState in order to store the video playback position for orientation change
-        savedInstanceState.putInt("Position", myVideoView.getCurrentPosition());
-        myVideoView.pause();
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        //we use onRestoreInstanceState in order to play the video playback from the stored position
-        position = savedInstanceState.getInt("Position");
-        myVideoView.seekTo(position);
-    }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         showInterstitial();
+    }
+
+    @Override
+    public void onPrepared() {
+        myVideoView.start();
     }
 }

@@ -14,6 +14,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -43,7 +44,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import cn.jzvd.Jzvd;
 
 
 public class MainActivity extends AppCompatActivity
@@ -92,23 +92,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
-
-
+        super.onBackPressed();
     }
 
     @Override
@@ -133,7 +117,40 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
+
+/*        MenuItem search_item = menu.findItem(R.id.search);
+
+        SearchView searchView = (SearchView) search_item.getActionView();
+        searchView.setFocusable(false);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                //clear the previous data in search arraylist if exist
+                search_result_arraylist.clear();
+
+                keyword = s.toUpperCase();
+
+                //checking language arraylist for items containing search keyword
+
+                for(int i =0 ;i < languagesarraylist.size();i++){
+                    if(languagesarraylist.get(i).contains(keyword)){
+                        search_result_arraylist.add(languagesarraylist.get(i).toString());
+                    }
+                }
+
+                language_adapter = new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,search_result_arraylist);
+                lv_languages.setAdapter(language_adapter);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });*/
         return true;
     }
 

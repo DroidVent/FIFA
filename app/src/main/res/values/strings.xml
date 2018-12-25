@@ -9,4 +9,5 @@
     <string name="action_signout">Logout</string>
     <string name="full_screen_ad_id">ca-app-pub-3638697738765989/8936201883</string>
     <string name="banner_home_footer">ca-app-pub-3638697738765989/6150256443</string>
+    <string name="search_hint">Search</string>
 </resources>
