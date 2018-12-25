@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.crashlytics.android.Crashlytics;
 import com.firstbit.fifaworldcup2018highlights.data.League;
 import com.firstbit.fifaworldcup2018highlights.data.Video;
 import com.firstbit.fifaworldcup2018highlights.fragments.StandingsFragment;
@@ -44,6 +45,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import io.fabric.sdk.android.Fabric;
 
 
 public class MainActivity extends AppCompatActivity
@@ -53,12 +55,11 @@ public class MainActivity extends AppCompatActivity
     private Fragment videoFragment = new VideosFragment();
     private AdView mAdView;
     private InterstitialAd mInterstitialAd;
-    private boolean doubleBackToExitPressedOnce;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Fabric.with(this, new Crashlytics());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         initBannerAd();
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        finish();
     }
 
     @Override
