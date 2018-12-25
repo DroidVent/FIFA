@@ -56,23 +56,23 @@ public class VideosFragment extends Fragment {
         rvVideos.setAdapter(videosAdapter);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
 
-        rvVideos.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
-            @Override
-            public void onChildViewAttachedToWindow(View view) {
-                Log.e("h", "");
-            }
-
-            @Override
-            public void onChildViewDetachedFromWindow(View view) {
-                Jzvd jzvd = view.findViewById(R.id.videoplayer);
-                if (jzvd != null && jzvd.jzDataSource.containsTheUrl(JZMediaManager.getCurrentUrl())) {
-                    Jzvd currentJzvd = JzvdMgr.getCurrentJzvd();
-                    if (currentJzvd != null && currentJzvd.currentScreen != Jzvd.SCREEN_WINDOW_FULLSCREEN) {
-                        Jzvd.releaseAllVideos();
-                    }
-                }
-            }
-        });
+//        rvVideos.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+//            @Override
+//            public void onChildViewAttachedToWindow(View view) {
+//                Log.e("h", "");
+//            }
+//
+//            @Override
+//            public void onChildViewDetachedFromWindow(View view) {
+//                Jzvd jzvd = view.findViewById(R.id.videoplayer);
+//                if (jzvd != null && jzvd.jzDataSource.containsTheUrl(JZMediaManager.getCurrentUrl())) {
+//                    Jzvd currentJzvd = JzvdMgr.getCurrentJzvd();
+//                    if (currentJzvd != null && currentJzvd.currentScreen != Jzvd.SCREEN_WINDOW_FULLSCREEN) {
+//                        Jzvd.releaseAllVideos();
+//                    }
+//                }
+//            }
+//        });
 
     }
 
@@ -101,7 +101,7 @@ public class VideosFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Jzvd.releaseAllVideos();
+//        Jzvd.releaseAllVideos();
     }
 }
 
