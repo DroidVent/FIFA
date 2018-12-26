@@ -79,4 +79,10 @@ public class VideoPlayerActivity extends AppCompatActivity implements OnPrepared
     public void onPrepared() {
         myVideoView.start();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        myVideoView.release();
+    }
 }

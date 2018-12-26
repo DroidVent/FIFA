@@ -99,59 +99,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        int ot = getResources().getConfiguration().orientation;
-        switch (ot) {
-
-            case Configuration.ORIENTATION_LANDSCAPE:
-
-                Log.d("my orient", "ORIENTATION_LANDSCAPE");
-                break;
-            case Configuration.ORIENTATION_PORTRAIT:
-                showInterstitial();
-                break;
-            default:
-                Log.d("my orient", "default val");
-                break;
-        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-
-/*        MenuItem search_item = menu.findItem(R.id.search);
-
-        SearchView searchView = (SearchView) search_item.getActionView();
-        searchView.setFocusable(false);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-
-                //clear the previous data in search arraylist if exist
-                search_result_arraylist.clear();
-
-                keyword = s.toUpperCase();
-
-                //checking language arraylist for items containing search keyword
-
-                for(int i =0 ;i < languagesarraylist.size();i++){
-                    if(languagesarraylist.get(i).contains(keyword)){
-                        search_result_arraylist.add(languagesarraylist.get(i).toString());
-                    }
-                }
-
-                language_adapter = new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,search_result_arraylist);
-                lv_languages.setAdapter(language_adapter);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });*/
         return true;
     }
 

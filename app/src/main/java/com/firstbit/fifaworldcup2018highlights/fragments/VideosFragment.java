@@ -43,35 +43,13 @@ public class VideosFragment extends Fragment {
         rootView = inflater.inflate(R.layout.videos_layout, container, false);
         videosTag = getArguments().getString("tag");
         init();
-        getVideos("");
+        getVideos();
         return rootView;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main, menu);
-        MenuItem search_item = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) search_item.getActionView();
-        searchView.setFocusable(false);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-
-                //clear the previous data in search arraylist if exist
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                videos.clear();
-                getVideos(s.toUpperCase());
-                return false;
-            }
-        });
     }
 
     private void init() {
@@ -85,17 +63,11 @@ public class VideosFragment extends Fragment {
         rvVideos.setAdapter(videosAdapter);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
     }
-    private void getVideos(String keyword) {
+    private void getVideos() {
         progressBar.setVisibility(View.VISIBLE);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         Query myRef;
-        if (keyword.isEmpty())
-            myRef = database.getReference(videosTag);
-        else
-        {
-            videos.clear();
-            myRef = database.getReference(videosTag).orderByChild("video_name").startAt(keyword);
-        }
+        myRef = database.getReference(videosTag);
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
