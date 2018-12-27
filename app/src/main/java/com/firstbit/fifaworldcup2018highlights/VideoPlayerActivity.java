@@ -76,6 +76,13 @@ public class VideoPlayerActivity extends AppCompatActivity implements OnPrepared
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (myVideoView != null)
+            myVideoView.stopPlayback();
+    }
+
+    @Override
     public void onPrepared() {
         myVideoView.start();
     }
