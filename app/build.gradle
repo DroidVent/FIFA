@@ -6,8 +6,8 @@ android {
         applicationId "com.firstbit.fifaworldcup2018highlights"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 10
-        versionName "1.0.9"
+        versionCode 11
+        versionName "1.0.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
