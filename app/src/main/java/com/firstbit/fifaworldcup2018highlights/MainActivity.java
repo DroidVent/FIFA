@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity
     private Fragment videoFragment = new VideosFragment();
     private AdView mAdView;
     private InterstitialAd mInterstitialAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity
         Fabric.with(this, new Crashlytics());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        initBannerAd();
+//        initBannerAd();
         MobileAds.initialize(this, getString(R.string.full_screen_ad_id));
         initFullScreenAds();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -120,12 +121,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         int groupId = item.getGroupId();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (id == R.id.nav_schedule) {
-            launchFragment(new ScheduleFragment(), "schedule");
-        } else if (id == R.id.nav_highlights) {
+        if (id == R.id.nav_highlights) {
             launchFragment(new VideosFragment(), "videos");
         } else if (id == R.id.nav_all_leagues)
             launchFragment(new VideosFragment(), "latest");
+        else if (id == R.id.nav_standings)
+            launchFragment(new StandingsFragment(), "standings");
         else if (groupId == R.id.leagues) {
             launchFragment(new VideosFragment(), item.toString());
         }

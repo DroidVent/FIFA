@@ -13,9 +13,9 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="World Cup Highlights" />
         <item
-            android:id="@+id/nav_schedule"
-            android:icon="@mipmap/schedule"
-            android:title="World Cup Schedule" />
+            android:id="@+id/nav_standings"
+            android:icon="@mipmap/standings"
+            android:title="@string/standings" />
 
     </group>
     <group android:id="@+id/leagues"/>
