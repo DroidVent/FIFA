@@ -1,76 +1,87 @@
 package com.firstbit.fifaworldcup2018highlights.data;
 
-public class Standing {
-    private String MP;
-    private String W;
-    private String D;
-    private String L;
-    private String GF;
-    private String GA;
-    private String GD;
-    private String Pts;
+import java.util.HashMap;
 
-    public String getMP() {
-        return MP;
+public class Standing extends HashMap<String, Standing> {
+    private String difference;
+    private String draw;
+    private String lose;
+    private String played;
+    private String points;
+    private String position;
+    private String profile_image;
+    private String team;
+    private String win;
+
+    public String getDifference() {
+        return difference;
     }
 
-    public void setMP(String MP) {
-        this.MP = MP;
+    public void setDifference(String difference) {
+        this.difference = difference;
     }
 
-    public String getW() {
-        return W;
+    public String getDraw() {
+        return draw;
     }
 
-    public void setW(String w) {
-        W = w;
+    public void setDraw(String draw) {
+        this.draw = draw;
     }
 
-    public String getD() {
-        return D;
+    public String getLose() {
+        return lose;
     }
 
-    public void setD(String d) {
-        D = d;
+    public void setLose(String lose) {
+        this.lose = lose;
     }
 
-    public String getL() {
-        return L;
+    public String getPlayed() {
+        return played;
     }
 
-    public void setL(String l) {
-        L = l;
+    public void setPlayed(String played) {
+        this.played = played;
     }
 
-    public String getGF() {
-        return GF;
+    public String getPoints() {
+        return points;
     }
 
-    public void setGF(String GF) {
-        this.GF = GF;
+    public void setPoints(String points) {
+        this.points = points;
     }
 
-    public String getGA() {
-        return GA;
+    public String getPosition() {
+        return position;
     }
 
-    public void setGA(String GA) {
-        this.GA = GA;
+    public void setPosition(String position) {
+        this.position = position;
     }
 
-    public String getGD() {
-        return GD;
+    public String getProfile_image() {
+        return profile_image;
     }
 
-    public void setGD(String GD) {
-        this.GD = GD;
+    public void setProfile_image(String profile_image) {
+        this.profile_image = profile_image;
     }
 
-    public String getPts() {
-        return Pts;
+    public String getTeam() {
+        return team;
     }
 
-    public void setPts(String pts) {
-        Pts = pts;
+    public void setTeam(String team) {
+        this.team = team;
+    }
+
+    public String getWin() {
+        return win;
+    }
+
+    public void setWin(String win) {
+        this.win = win;
     }
 }
