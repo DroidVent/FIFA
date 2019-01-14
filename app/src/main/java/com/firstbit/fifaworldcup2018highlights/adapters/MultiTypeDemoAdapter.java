@@ -27,7 +27,7 @@ public class MultiTypeDemoAdapter  extends SectioningAdapter {
     ArrayList<Group> sections;
 
     public class ItemViewHolder0 extends SectioningAdapter.ItemViewHolder {
-        TextView tvTeam, tvPosition, tvPlayed, tvDiff, tvWon, tvLose, tvPts, tvDraw;
+        TextView tvTeam, tvPosition, tvPlayed, tvDiff, tvWon, tvLose, tvPts;
 
         public ItemViewHolder0(View itemView) {
             super(itemView);
@@ -38,7 +38,7 @@ public class MultiTypeDemoAdapter  extends SectioningAdapter {
             tvWon = (TextView) itemView.findViewById(R.id.tv_won);
             tvLose = (TextView) itemView.findViewById(R.id.tv_lose);
             tvPts = (TextView) itemView.findViewById(R.id.tv_points);
-            tvDraw = (TextView) itemView.findViewById(R.id.tv_draw);
+
         }
     }
 
@@ -117,7 +117,6 @@ public class MultiTypeDemoAdapter  extends SectioningAdapter {
         ivh.tvPlayed.setText((CharSequence) mp.get("played"));
         ivh.tvWon.setText((CharSequence) mp.get("win"));
         ivh.tvLose.setText((CharSequence) mp.get("lose"));
-        ivh.tvDraw.setText((CharSequence) mp.get("draw"));
         ivh.tvDiff.setText((CharSequence) mp.get("difference"));
         ivh.tvPts.setText((CharSequence) mp.get("points"));
 

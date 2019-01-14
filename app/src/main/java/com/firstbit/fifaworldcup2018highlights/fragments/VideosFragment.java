@@ -19,7 +19,6 @@ import android.widget.ProgressBar;
 import com.firstbit.fifaworldcup2018highlights.R;
 import com.firstbit.fifaworldcup2018highlights.adapters.VideosAdapter;
 import com.firstbit.fifaworldcup2018highlights.data.Video;
-import com.google.android.gms.flags.impl.DataUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;

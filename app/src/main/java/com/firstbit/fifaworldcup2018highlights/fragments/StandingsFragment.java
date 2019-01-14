@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import com.firstbit.fifaworldcup2018highlights.R;
 import com.firstbit.fifaworldcup2018highlights.adapters.MultiTypeDemoAdapter;
@@ -37,6 +38,7 @@ public class StandingsFragment extends Fragment {
     private ArrayList<Group> groupsList  = new ArrayList<>();
     private RecyclerView rvStandings;
     MultiTypeDemoAdapter multiTypeDemoAdapter;
+    private RelativeLayout rlLabel;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class StandingsFragment extends Fragment {
     private void initStandingAdapter() {
 
         rvStandings = rootView.findViewById(R.id.rv_standings);
+
         rvStandings.setLayoutManager(new StickyHeaderLayoutManager());
         rvStandings.setHasFixedSize(false);
         multiTypeDemoAdapter = new MultiTypeDemoAdapter(groupsList);
@@ -59,6 +62,7 @@ public class StandingsFragment extends Fragment {
     }
 
     private void initSpinner() {
+        rlLabel = rootView.findViewById(R.id.rl_label);
         spinner = rootView.findViewById(R.id.table_spinner);
         leaguesAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, leaguesList);
         leaguesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -67,6 +71,7 @@ public class StandingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
                 String selectedTxt = leaguesList.get(pos);
+                rlLabel.setVisibility(View.VISIBLE);
                 getLeagueStanding(selectedTxt);
             }
 
